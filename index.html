@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>Pie Tracker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ── Reset & Variables ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #13131a;
+      --border:    rgba(255,255,255,0.07);
+      --text:      #f0f0f5;
+      --muted:     #6b6b80;
+      --green:     #22c55e;
+      --red:       #ef4444;
+      --accent:    #a78bfa;
+      --mono:      'DM Mono', monospace;
+      --sans:      'Syne', sans-serif;
+      --radius:    14px;
+      --safe-top:  env(safe-area-inset-top, 0px);
+      --safe-bot:  env(safe-area-inset-bottom, 0px);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    /* ── Layout ────────────────────────────────────────── */
+    #app {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bot) + 80px);
+      min-height: 100dvh;
+    }
+
+    /* ── Navigation ────────────────────────────────────── */
+    nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding-bottom: var(--safe-bot);
+      z-index: 100;
+    }
+
+    nav button {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 4px 10px;
+      cursor: pointer;
+      transition: color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    nav button svg { width: 20px; height: 20px; stroke-width: 1.8; }
+    nav button.active { color: var(--accent); }
+
+    /* ── Pages ─────────────────────────────────────────── */
+    .page { display: none; animation: fadeUp 0.35s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Header ────────────────────────────────────────── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .refresh-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .refresh-btn:hover { color: var(--text); }
+    .refresh-btn svg { width: 16px; height: 16px; stroke-width: 2; }
+    .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Big Value ─────────────────────────────────────── */
+    .big-value {
+      margin-bottom: 32px;
+    }
+
+    .big-value .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .big-value .amount {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .big-value .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .badge.up   { background: rgba(34,197,94,0.12);  color: var(--green); }
+    .badge.down { background: rgba(239,68,68,0.12);  color: var(--red);   }
+    .badge.flat { background: rgba(107,107,128,0.12); color: var(--muted); }
+
+    /* ── Cards Grid ────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .card.wide { grid-column: 1 / -1; }
+
+    .card .card-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .card .card-value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .card .card-value.green { color: var(--green); }
+    .card .card-value.red   { color: var(--red);   }
+
+    .card .card-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Chart ─────────────────────────────────────────── */
+    .chart-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .chart-wrap canvas { width: 100% !important; }
+
+    /* ── Section title ─────────────────────────────────── */
+    .section-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* ── Holdings list ─────────────────────────────────── */
+    .holdings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .holding-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .holding-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .holding-ticker {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .holding-right { text-align: right; }
+
+    .holding-value {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .holding-return {
+      font-family: var(--mono);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .holding-return.pos { color: var(--green); }
+    .holding-return.neg { color: var(--red); }
+
+    /* ── Transaction list ──────────────────────────────── */
+    .tx-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tx-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tx-left { display: flex; align-items: center; gap: 12px; }
+
+    .tx-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .tx-icon.deposit    { background: rgba(34,197,94,0.12); }
+    .tx-icon.withdrawal { background: rgba(239,68,68,0.12); }
+    .tx-icon.dividend   { background: rgba(167,139,250,0.12); }
+
+    .tx-type {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .tx-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .tx-amount {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .tx-amount.deposit  { color: var(--green); }
+    .tx-amount.withdrawal { color: var(--red); }
+    .tx-amount.dividend { color: var(--accent); }
+
+    /* ── Summary strip ─────────────────────────────────── */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .strip-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .strip-item .s-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .strip-item .s-val {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .strip-item .s-val.green  { color: var(--green); }
+    .strip-item .s-val.red    { color: var(--red); }
+    .strip-item .s-val.purple { color: var(--accent); }
+
+    /* ── Skeleton loader ───────────────────────────────── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 25%, rgba(255,255,255,0.04) 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px;
+      height: 20px;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── Error ─────────────────────────────────────────── */
+    .error-box {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    /* ── Last updated ──────────────────────────────────── */
+    .last-updated {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ── Filter tabs ───────────────────────────────────── */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .filter-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- ── Dashboard Page ──────────────────────────────── -->
+  <div class="page active" id="page-dashboard">
+    <div class="header">
+      <h1>Portfolio</h1>
+      <button class="refresh-btn" id="refresh-btn" onclick="refreshAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M1 4v6h6M23 20v-6h-6"/>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="big-value">
+      <div class="label">Current Value</div>
+      <div class="amount" id="dash-value">—</div>
+      <div id="dash-badge"></div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Invested</div>
+        <div class="card-value" id="dash-invested">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Gain / Loss</div>
+        <div class="card-value" id="dash-gainloss">—</div>
+        <div class="card-sub" id="dash-gainpct"></div>
+      </div>
+      <div class="card wide">
+        <div class="card-label">Total Deposited</div>
+        <div class="card-value" id="dash-deposited">—</div>
+        <div class="card-sub" id="dash-withdrawn"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Holdings</div>
+    <div class="holdings-list" id="holdings-list">
+      <div class="skeleton" style="height:60px"></div>
+      <div class="skeleton" style="height:60px"></div>
+      <div class="skeleton" style="height:60px"></div>
+    </div>
+
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+
+  <!-- ── Chart Page ───────────────────────────────────── -->
+  <div class="page" id="page-chart">
+    <div class="header">
+      <h1>Performance</h1>
+    </div>
+
+    <div class="cards" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-label">Return</div>
+        <div class="card-value" id="chart-pct">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Net Gain</div>
+        <div class="card-value" id="chart-gain">—</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="pieChart" height="220"></canvas>
+    </div>
+
+    <div class="section-title" style="margin-top:8px">Allocation</div>
+    <div class="holdings-list" id="alloc-list"></div>
+  </div>
+
+  <!-- ── History Page ─────────────────────────────────── -->
+  <div class="page" id="page-history">
+    <div class="header">
+      <h1>History</h1>
+    </div>
+
+    <div class="summary-strip">
+      <div class="strip-item">
+        <div class="s-label">In</div>
+        <div class="s-val green" id="hist-in">—</div>
+      </div>
+      <div class="strip-item">
+        <div class="s-label">Out</div>
+        <div class="s-val red" id="hist-out">—</div>
+      </div>
+      <div class="strip-item">
+        <div class="s-label">Dividends</div>
+        <div class="s-val purple" id="hist-div">—</div>
+      </div>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterTx('ALL', this)">All</button>
+      <button class="filter-tab" onclick="filterTx('DEPOSIT', this)">Deposits</button>
+      <button class="filter-tab" onclick="filterTx('WITHDRAWAL', this)">Withdrawals</button>
+      <button class="filter-tab" onclick="filterTx('DIVIDEND', this)">Dividends</button>
+    </div>
+
+    <div class="tx-list" id="tx-list">
+      <div class="skeleton" style="height:64px"></div>
+      <div class="skeleton" style="height:64px"></div>
+      <div class="skeleton" style="height:64px"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Bottom Nav ──────────────────────────────────────── -->
+<nav>
+  <button class="active" onclick="showPage('dashboard', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+      <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+      <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+      <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+    </svg>
+    Overview
+  </button>
+  <button onclick="showPage('chart', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+    Performance
+  </button>
+  <button onclick="showPage('history', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    History
+  </button>
+</nav>
+
+<script>
+// ── Config ──────────────────────────────────────────────
+const WORKER_URL = "https://lukesportfolio.samuelalmeidacardy-380.workers.dev/"; // e.g. https://pie-tracker.yourname.workers.dev
+
+// ── State ───────────────────────────────────────────────
+let pieData    = null;
+let histData   = null;
+let txFilter   = "ALL";
+let chart      = null;
+
+// ── Navigation ───────────────────────────────────────────
+function showPage(name, btn) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById(`page-${name}`).classList.add("active");
+  btn.classList.add("active");
+}
+
+// ── Formatting ───────────────────────────────────────────
+function fmt(n, decimals = 2) {
+  return "£" + Math.abs(n).toLocaleString("en-GB", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+}
+
+function fmtDate(iso) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric", month: "short", year: "numeric"
+  });
+}
+
+function sign(n) { return n >= 0 ? "+" : "−"; }
+
+// ── Fetch ────────────────────────────────────────────────
+async function fetchPie() {
+  const res = await fetch(`${WORKER_URL}/pie`);
+  if (!res.ok) throw new Error(`Pie fetch failed: ${res.status}`);
+  return res.json();
+}
+
+async function fetchHistory() {
+  const res = await fetch(`${WORKER_URL}/history`);
+  if (!res.ok) throw new Error(`History fetch failed: ${res.status}`);
+  return res.json();
+}
+
+// ── Render Dashboard ────────────────────────────────────
+function renderDashboard() {
+  if (!pieData) return;
+
+  const { value, invested, gainLoss, gainPct, holdings, updatedAt } = pieData;
+
+  document.getElementById("dash-value").textContent = fmt(value);
+
+  // Badge
+  const dir = gainLoss > 0 ? "up" : gainLoss < 0 ? "down" : "flat";
+  const badgeEl = document.getElementById("dash-badge");
+  badgeEl.innerHTML = `<span class="badge ${dir}">
+    ${sign(gainLoss)}${fmt(gainLoss)} &nbsp; ${sign(gainPct)}${Math.abs(gainPct).toFixed(2)}%
+  </span>`;
+
+  document.getElementById("dash-invested").textContent = fmt(invested);
+
+  const glEl = document.getElementById("dash-gainloss");
+  glEl.textContent = `${sign(gainLoss)}${fmt(gainLoss)}`;
+  glEl.className = "card-value " + (gainLoss >= 0 ? "green" : "red");
+  document.getElementById("dash-gainpct").textContent = `${sign(gainPct)}${Math.abs(gainPct).toFixed(2)}%`;
+
+  if (histData) {
+    document.getElementById("dash-deposited").textContent = fmt(histData.totalDeposited);
+    document.getElementById("dash-withdrawn").textContent =
+      histData.totalWithdrawn > 0 ? `${fmt(histData.totalWithdrawn)} withdrawn` : "No withdrawals";
+  }
+
+  // Holdings
+  const list = document.getElementById("holdings-list");
+  if (!holdings || holdings.length === 0) {
+    list.innerHTML = `<div class="error-box">No holdings found in this pie.</div>`;
+    return;
+  }
+
+  list.innerHTML = holdings
+    .sort((a, b) => b.value - a.value)
+    .map(h => {
+      const ret = h.result * 100;
+      const cls = ret >= 0 ? "pos" : "neg";
+      return `
+        <div class="holding-row">
+          <div>
+            <div class="holding-name">${h.name}</div>
+            <div class="holding-ticker">${h.ticker}</div>
+          </div>
+          <div class="holding-right">
+            <div class="holding-value">${fmt(h.value)}</div>
+            <div class="holding-return ${cls}">${sign(ret)}${Math.abs(ret).toFixed(2)}%</div>
+          </div>
+        </div>`;
+    }).join("");
+
+  if (updatedAt) {
+    document.getElementById("last-updated").textContent =
+      "Updated " + new Date(updatedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  }
+}
+
+// ── Render Chart Page ────────────────────────────────────
+function renderChart() {
+  if (!pieData) return;
+
+  const { gainLoss, gainPct, holdings } = pieData;
+  const dir = gainLoss >= 0 ? "green" : "red";
+
+  document.getElementById("chart-pct").textContent = `${sign(gainPct)}${Math.abs(gainPct).toFixed(2)}%`;
+  document.getElementById("chart-pct").className = `card-value ${dir}`;
+  document.getElementById("chart-gain").textContent = `${sign(gainLoss)}${fmt(gainLoss)}`;
+  document.getElementById("chart-gain").className = `card-value ${dir}`;
+
+  // Doughnut chart of allocation
+  const sorted = [...(holdings || [])].sort((a, b) => b.value - a.value);
+
+  const COLORS = [
+    "#a78bfa", "#22c55e", "#38bdf8", "#fb923c",
+    "#f472b6", "#facc15", "#34d399", "#60a5fa",
+  ];
+
+  if (chart) chart.destroy();
+
+  const ctx = document.getElementById("pieChart").getContext("2d");
+  chart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: sorted.map(h => h.ticker),
+      datasets: [{
+        data: sorted.map(h => h.value.toFixed(2)),
+        backgroundColor: COLORS.slice(0, sorted.length),
+        borderColor: "#0a0a0f",
+        borderWidth: 3,
+        hoverOffset: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: "68%",
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${fmt(parseFloat(ctx.raw))}  (${((ctx.raw / sorted.reduce((s,h)=>s+h.value,0))*100).toFixed(1)}%)`
+          }
+        }
+      }
+    }
+  });
+
+  // Allocation list
+  const total = sorted.reduce((s, h) => s + h.value, 0);
+  document.getElementById("alloc-list").innerHTML = sorted.map((h, i) => `
+    <div class="holding-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:${COLORS[i] || '#6b6b80'};flex-shrink:0"></div>
+        <div>
+          <div class="holding-name">${h.name}</div>
+          <div class="holding-ticker">${h.ticker}</div>
+        </div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-value">${fmt(h.value)}</div>
+        <div class="holding-return" style="color:var(--muted)">${((h.value/total)*100).toFixed(1)}%</div>
+      </div>
+    </div>`).join("");
+}
+
+// ── Render History ───────────────────────────────────────
+function renderHistory() {
+  if (!histData) return;
+
+  document.getElementById("hist-in").textContent  = fmt(histData.totalDeposited);
+  document.getElementById("hist-out").textContent  = fmt(histData.totalWithdrawn);
+  document.getElementById("hist-div").textContent  = fmt(histData.totalDividends);
+
+  renderTxList();
+}
+
+function filterTx(type, btn) {
+  txFilter = type;
+  document.querySelectorAll(".filter-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTxList();
+}
+
+function renderTxList() {
+  if (!histData) return;
+
+  const txEl = document.getElementById("tx-list");
+  let txs = histData.transactions;
+
+  if (txFilter !== "ALL") {
+    txs = txs.filter(t => t.type === txFilter);
+  }
+
+  if (txs.length === 0) {
+    txEl.innerHTML = `<div class="error-box" style="color:var(--muted);background:var(--surface)">No transactions found.</div>`;
+    return;
+  }
+
+  const icons = { DEPOSIT: "↓", WITHDRAWAL: "↑", DIVIDEND: "✦" };
+
+  txEl.innerHTML = txs
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(t => {
+      const cls = t.type.toLowerCase();
+      const prefix = t.type === "DEPOSIT" ? "+" : t.type === "WITHDRAWAL" ? "−" : "+";
+      return `
+        <div class="tx-row">
+          <div class="tx-left">
+            <div class="tx-icon ${cls}">${icons[t.type] ?? "·"}</div>
+            <div>
+              <div class="tx-type">${t.type.charAt(0) + t.type.slice(1).toLowerCase()}${t.note ? ` · ${t.note}` : ""}</div>
+              <div class="tx-date">${fmtDate(t.date)}</div>
+            </div>
+          </div>
+          <div class="tx-amount ${cls}">${prefix}${fmt(t.amount)}</div>
+        </div>`;
+    }).join("");
+}
+
+// ── Refresh All ──────────────────────────────────────────
+async function refreshAll() {
+  const btn = document.getElementById("refresh-btn");
+  btn.classList.add("spinning");
+
+  try {
+    const [pie, hist] = await Promise.all([fetchPie(), fetchHistory()]);
+    pieData  = pie;
+    histData = hist;
+    renderDashboard();
+    renderChart();
+    renderHistory();
+  } catch (e) {
+    console.error(e);
+    document.getElementById("holdings-list").innerHTML =
+      `<div class="error-box">⚠ ${e.message}</div>`;
+  } finally {
+    btn.classList.remove("spinning");
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────
+refreshAll();
+</script>
+</body>
+</html>
