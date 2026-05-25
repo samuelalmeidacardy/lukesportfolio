@@ -22,7 +22,6 @@
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; min-height: 100vh; min-height: 100dvh; }
 
-  /* ── Connect screen ── */
   .connect-wrap { max-width: 420px; margin: 0 auto; padding: 48px 16px; }
   .connect-logo { text-align: center; margin-bottom: 28px; }
   .connect-icon { width: 56px; height: 56px; border-radius: 14px; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #fff; margin: 0 auto 12px; }
@@ -39,11 +38,9 @@
   .info-text { font-size: 11px; color: var(--dim); text-align: center; margin-top: 12px; line-height: 1.6; }
   .hidden { display: none !important; }
 
-  /* ── Main app ── */
   #app { padding-bottom: 72px; }
   .container { max-width: 480px; margin: 0 auto; padding: 12px; }
 
-  /* Header */
   .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .header-logo { display: flex; align-items: center; gap: 8px; }
   .header-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
@@ -54,17 +51,14 @@
   .spinning { animation: spin 1s linear infinite; display: inline-block; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Bottom nav */
   nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(11,17,32,0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom, 0); z-index: 100; }
   nav button { flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 4px 8px; cursor: pointer; transition: color 0.15s; }
   nav button.active { color: var(--purple); }
 
-  /* Pages */
   .page { display: none; }
   .page.active { display: block; animation: fadeUp 0.25s ease; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Stats */
   .big-stat { margin-bottom: 16px; }
   .big-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
   .big-val { font-size: 44px; font-weight: 700; letter-spacing: -1.5px; line-height: 1; }
@@ -82,7 +76,6 @@
   .green { color: var(--green); }
   .red { color: var(--red); }
 
-  /* Holdings */
   .section-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 4px; }
   .holding-row { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .holding-name { font-size: 14px; font-weight: 600; }
@@ -91,11 +84,9 @@
   .holding-val { font-size: 14px; font-weight: 600; }
   .holding-ret { font-size: 11px; margin-top: 2px; }
 
-  /* Chart */
   .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
   .chart-wrap canvas { width: 100% !important; }
 
-  /* Transactions */
   .summary-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
   .strip-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
   .strip-label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
@@ -120,13 +111,12 @@
 
   .skeleton { background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 10px; height: 60px; margin-bottom: 8px; }
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
   .last-updated { font-size: 10px; color: var(--dim); text-align: center; margin-top: 8px; }
 </style>
 </head>
 <body>
 
-<!-- ── SETUP SCREEN (admin only) ── -->
+<!-- SETUP SCREEN -->
 <div id="setupScreen">
   <div class="connect-wrap">
     <div class="connect-logo">
@@ -144,6 +134,10 @@
         <input class="form-input" id="inputKey" type="password" placeholder="Paste your T212 API key">
       </div>
       <div class="form-group">
+        <label class="form-label">API Secret</label>
+        <input class="form-input" id="inputSecret" type="password" placeholder="Paste your T212 API secret">
+      </div>
+      <div class="form-group">
         <label class="form-label">Pie Name</label>
         <input class="form-input" id="inputPie" placeholder="e.g. Luke's-Savings">
       </div>
@@ -151,17 +145,16 @@
       <button class="btn" id="btnSave" onclick="saveSetup()">Save & Connect</button>
     </div>
     <div class="info-text">
-      Enter your Cloudflare Worker URL, T212 API key, and the exact pie name.<br>
-      Credentials are saved locally on this device only — never sent to any server.
+      Enter your Cloudflare Worker URL, T212 credentials, and the exact pie name.<br>
+      All credentials saved locally on this device only.
     </div>
   </div>
 </div>
 
-<!-- ── MAIN APP ── -->
+<!-- MAIN APP -->
 <div id="app" class="hidden">
   <div class="container">
 
-    <!-- Dashboard -->
     <div class="page active" id="page-dashboard">
       <div class="header">
         <div class="header-logo">
@@ -173,13 +166,11 @@
           <button class="btn-sm" onclick="resetSetup()" title="Reset setup">⚙</button>
         </div>
       </div>
-
       <div class="big-stat">
         <div class="big-label">Current Value</div>
         <div class="big-val" id="dash-value">—</div>
         <div id="dash-badge"></div>
       </div>
-
       <div class="stat-grid">
         <div class="stat">
           <div class="stat-label">Invested</div>
@@ -196,7 +187,6 @@
           <div class="stat-sub" id="dash-withdrawn"></div>
         </div>
       </div>
-
       <div class="section-label">Holdings</div>
       <div id="holdings-list">
         <div class="skeleton"></div>
@@ -206,7 +196,6 @@
       <div class="last-updated" id="last-updated"></div>
     </div>
 
-    <!-- Performance -->
     <div class="page" id="page-chart">
       <div class="header">
         <div class="header-logo">
@@ -214,7 +203,6 @@
           <div class="header-title">Performance</div>
         </div>
       </div>
-
       <div class="stat-grid" style="margin-bottom:14px">
         <div class="stat">
           <div class="stat-label">Return</div>
@@ -225,16 +213,13 @@
           <div class="stat-val" id="chart-gain">—</div>
         </div>
       </div>
-
       <div class="chart-wrap">
         <canvas id="pieChart" height="200"></canvas>
       </div>
-
       <div class="section-label">Allocation</div>
       <div id="alloc-list"></div>
     </div>
 
-    <!-- History -->
     <div class="page" id="page-history">
       <div class="header">
         <div class="header-logo">
@@ -242,7 +227,6 @@
           <div class="header-title">History</div>
         </div>
       </div>
-
       <div class="summary-strip">
         <div class="strip-item">
           <div class="strip-label">In</div>
@@ -257,14 +241,12 @@
           <div class="strip-val" style="color:var(--purple)" id="hist-div">—</div>
         </div>
       </div>
-
       <div class="filter-tabs">
         <button class="filter-tab active" onclick="filterTx('ALL',this)">All</button>
         <button class="filter-tab" onclick="filterTx('DEPOSIT',this)">Deposits</button>
         <button class="filter-tab" onclick="filterTx('WITHDRAWAL',this)">Withdrawals</button>
         <button class="filter-tab" onclick="filterTx('DIVIDEND',this)">Dividends</button>
       </div>
-
       <div id="tx-list">
         <div class="skeleton"></div>
         <div class="skeleton"></div>
@@ -275,7 +257,6 @@
   </div>
 </div>
 
-<!-- ── BOTTOM NAV ── -->
 <nav id="bottomNav" class="hidden">
   <button class="active" onclick="showPage('dashboard',this)">Overview</button>
   <button onclick="showPage('chart',this)">Performance</button>
@@ -283,22 +264,19 @@
 </nav>
 
 <script>
-// ── State ──────────────────────────────────────────────────
-var state = { proxyUrl: '', apiKey: '', pieName: '', pieData: null, histData: null, txFilter: 'ALL', chart: null };
+var state = { proxyUrl: '', apiKey: '', apiSecret: '', pieName: '', pieData: null, histData: null, txFilter: 'ALL', chart: null };
 
-// ── Storage ────────────────────────────────────────────────
 function saveCredentials() {
-  try { localStorage.setItem('luke_pie', JSON.stringify({ p: state.proxyUrl, k: state.apiKey, n: state.pieName })); } catch(e) {}
+  try { localStorage.setItem('luke_pie', JSON.stringify({ p: state.proxyUrl, k: state.apiKey, s: state.apiSecret, n: state.pieName })); } catch(e) {}
 }
 function loadCredentials() {
   try {
     var d = JSON.parse(localStorage.getItem('luke_pie'));
-    if (d && d.p && d.k && d.n) { state.proxyUrl = d.p; state.apiKey = d.k; state.pieName = d.n; return true; }
+    if (d && d.p && d.k && d.n) { state.proxyUrl = d.p; state.apiKey = d.k; state.apiSecret = d.s || ''; state.pieName = d.n; return true; }
   } catch(e) {}
   return false;
 }
 
-// ── Helpers ────────────────────────────────────────────────
 function $(id) { return document.getElementById(id); }
 function fmt(n) { return '£' + Math.abs(n).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function sign(n) { return n >= 0 ? '+' : '−'; }
@@ -306,32 +284,39 @@ function fmtDate(iso) { if (!iso) return '—'; return new Date(iso).toLocaleDat
 function showError(msg) { $('errorBox').textContent = msg; $('errorBox').classList.remove('hidden'); }
 function hideError() { $('errorBox').classList.add('hidden'); }
 
-// ── API calls — pass key per-request, same as dividend tracker ──
-async function apiGet(endpoint) {
-  var url = state.proxyUrl.replace(/\/+$/, '') + '/live' + endpoint;
-  var res = await fetch(url, { headers: { Authorization: 'Basic ' + btoa(state.apiKey + ':') } });
-  if (!res.ok) throw new Error('API error ' + res.status);
-  return res.json();
+function getCreds() { return btoa(state.apiKey + ':' + state.apiSecret); }
+
+async function apiGet(endpoint, paginate) {
+  var base = state.proxyUrl.replace(/\/+$/, '') + '/live';
+  var url = base + endpoint;
+  var all = [];
+  while (true) {
+    var res = await fetch(url, { headers: { Authorization: 'Basic ' + getCreds() } });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    var data = await res.json();
+    if (!paginate) return data;
+    if (data.items) all = all.concat(data.items); else return data;
+    if (data.nextPagePath) { url = base + data.nextPagePath; } else break;
+  }
+  return all;
 }
 
 async function findPie() {
-  var pies = await apiGet('/equity/pies');
-  var pie = (Array.isArray(pies) ? pies : []).find(function(p) {
-    return (p.settings && p.settings.name && p.settings.name.toLowerCase() === state.pieName.toLowerCase());
-  });
-  if (!pie) throw new Error('Pie "' + state.pieName + '" not found');
+  var pies = await apiGet('/equity/pies', false);
+  var list = Array.isArray(pies) ? pies : [];
+  var pie = list.find(function(p) { return p.settings && p.settings.name && p.settings.name.toLowerCase() === state.pieName.toLowerCase(); });
+  if (!pie) throw new Error('Pie "' + state.pieName + '" not found. Available: ' + list.map(function(p){ return p.settings && p.settings.name; }).join(', '));
   return pie;
 }
 
 async function fetchPieData() {
   var pie = await findPie();
-  var detail = await apiGet('/equity/pies/' + pie.id);
+  var detail = await apiGet('/equity/pies/' + pie.id, false);
   var invested = (detail.settings && detail.settings.initialInvestment) || 0;
   var value = (detail.result && detail.result.value) || 0;
   var gainLoss = value - invested;
   var gainPct = invested > 0 ? (gainLoss / invested) * 100 : 0;
   return {
-    name: (detail.settings && detail.settings.name) || state.pieName,
     value: value, invested: invested, gainLoss: gainLoss, gainPct: gainPct,
     holdings: (detail.instruments || []).map(function(h) {
       return { ticker: h.ticker, name: h.fullName || h.ticker, value: (h.result && h.result.value) || 0, result: (h.result && h.result.resultCoefficient) || 0 };
@@ -341,49 +326,34 @@ async function fetchPieData() {
 }
 
 async function fetchHistory() {
-  var all = [], cursor = null;
-  for (var i = 0; i < 50; i++) {
-    var qs = cursor ? '?cursor=' + cursor + '&limit=50' : '?limit=50';
-    var page = await apiGet('/history/transactions' + qs);
-    var items = page.items || [];
-    all = all.concat(items);
-    if (!page.nextPagePath) break;
-    var m = page.nextPagePath.match(/cursor=([^&]+)/);
-    cursor = m ? m[1] : null;
-    if (!cursor) break;
-  }
-  var relevant = all.filter(function(t) { return ['DEPOSIT','WITHDRAWAL','DIVIDEND'].indexOf(t.type) > -1; });
+  var txs = await apiGet('/history/transactions?limit=50', true);
+  var relevant = txs.filter(function(t) { return ['DEPOSIT','WITHDRAWAL','DIVIDEND'].indexOf(t.type) > -1; });
   var transactions = relevant.map(function(t) {
-    return { id: t.reference || t.id, type: t.type, amount: t.amount || 0, date: t.dateCreated || t.date, note: t.type === 'DIVIDEND' ? (t.ticker || '') : '' };
+    return { type: t.type, amount: t.amount || 0, date: t.dateCreated || t.date, note: t.type === 'DIVIDEND' ? (t.ticker || '') : '' };
   });
-  var totalDeposited = transactions.filter(function(t){return t.type==='DEPOSIT';}).reduce(function(s,t){return s+t.amount;},0);
-  var totalWithdrawn = transactions.filter(function(t){return t.type==='WITHDRAWAL';}).reduce(function(s,t){return s+Math.abs(t.amount);},0);
-  var totalDividends = transactions.filter(function(t){return t.type==='DIVIDEND';}).reduce(function(s,t){return s+t.amount;},0);
-  return { transactions: transactions, totalDeposited: totalDeposited, totalWithdrawn: totalWithdrawn, totalDividends: totalDividends };
+  return {
+    transactions: transactions,
+    totalDeposited: transactions.filter(function(t){return t.type==='DEPOSIT';}).reduce(function(s,t){return s+t.amount;},0),
+    totalWithdrawn: transactions.filter(function(t){return t.type==='WITHDRAWAL';}).reduce(function(s,t){return s+Math.abs(t.amount);},0),
+    totalDividends: transactions.filter(function(t){return t.type==='DIVIDEND';}).reduce(function(s,t){return s+t.amount;},0)
+  };
 }
 
-// ── Render ─────────────────────────────────────────────────
 function renderDashboard() {
   var d = state.pieData; if (!d) return;
   $('dash-value').textContent = fmt(d.value);
   var dir = d.gainLoss > 0 ? 'up' : d.gainLoss < 0 ? 'down' : 'flat';
   $('dash-badge').innerHTML = '<span class="big-badge badge-' + dir + '">' + sign(d.gainLoss) + fmt(d.gainLoss) + '  ' + sign(d.gainPct) + Math.abs(d.gainPct).toFixed(2) + '%</span>';
   $('dash-invested').textContent = fmt(d.invested);
-  var glEl = $('dash-gl');
-  glEl.textContent = sign(d.gainLoss) + fmt(d.gainLoss);
-  glEl.className = 'stat-val ' + (d.gainLoss >= 0 ? 'green' : 'red');
+  var glEl = $('dash-gl'); glEl.textContent = sign(d.gainLoss) + fmt(d.gainLoss); glEl.className = 'stat-val ' + (d.gainLoss >= 0 ? 'green' : 'red');
   $('dash-glpct').textContent = sign(d.gainPct) + Math.abs(d.gainPct).toFixed(2) + '%';
   if (state.histData) {
     $('dash-deposited').textContent = fmt(state.histData.totalDeposited);
     $('dash-withdrawn').textContent = state.histData.totalWithdrawn > 0 ? fmt(state.histData.totalWithdrawn) + ' withdrawn' : 'No withdrawals';
   }
-  var holdings = (d.holdings || []).sort(function(a,b){ return b.value - a.value; });
-  $('holdings-list').innerHTML = holdings.length === 0
-    ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No holdings found.</div>'
-    : holdings.map(function(h) {
-        var ret = h.result * 100;
-        return '<div class="holding-row"><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret ' + (ret>=0?'green':'red') + '">' + sign(ret) + Math.abs(ret).toFixed(2) + '%</div></div></div>';
-      }).join('');
+  var holdings = (d.holdings || []).slice().sort(function(a,b){ return b.value - a.value; });
+  $('holdings-list').innerHTML = holdings.length === 0 ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No holdings found.</div>'
+    : holdings.map(function(h) { var ret = h.result * 100; return '<div class="holding-row"><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret ' + (ret>=0?'green':'red') + '">' + sign(ret) + Math.abs(ret).toFixed(2) + '%</div></div></div>'; }).join('');
   $('last-updated').textContent = 'Updated ' + new Date(d.updatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
 
@@ -396,119 +366,84 @@ function renderChart() {
   var sorted = (d.holdings || []).slice().sort(function(a,b){ return b.value - a.value; });
   var COLORS = ['#8b5cf6','#10b981','#3b82f6','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16'];
   if (state.chart) state.chart.destroy();
-  var ctx = $('pieChart').getContext('2d');
-  state.chart = new Chart(ctx, {
+  state.chart = new Chart($('pieChart').getContext('2d'), {
     type: 'doughnut',
-    data: {
-      labels: sorted.map(function(h){ return h.ticker; }),
-      datasets: [{ data: sorted.map(function(h){ return h.value.toFixed(2); }), backgroundColor: COLORS.slice(0, sorted.length), borderColor: '#0b1120', borderWidth: 3, hoverOffset: 6 }]
-    },
+    data: { labels: sorted.map(function(h){return h.ticker;}), datasets: [{ data: sorted.map(function(h){return h.value.toFixed(2);}), backgroundColor: COLORS.slice(0,sorted.length), borderColor: '#0b1120', borderWidth: 3, hoverOffset: 6 }] },
     options: { responsive: true, cutout: '68%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { var total = sorted.reduce(function(s,h){return s+h.value;},0); return ' ' + fmt(parseFloat(ctx.raw)) + '  (' + ((ctx.raw/total)*100).toFixed(1) + '%)'; } } } } }
   });
   var total = sorted.reduce(function(s,h){return s+h.value;},0);
-  $('alloc-list').innerHTML = sorted.map(function(h, i) {
-    return '<div class="holding-row"><div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;border-radius:50%;background:' + (COLORS[i]||'#64748b') + ';flex-shrink:0"></div><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret" style="color:var(--muted)">' + ((h.value/total)*100).toFixed(1) + '%</div></div></div>';
-  }).join('');
+  $('alloc-list').innerHTML = sorted.map(function(h,i){ return '<div class="holding-row"><div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;border-radius:50%;background:' + (COLORS[i]||'#64748b') + ';flex-shrink:0"></div><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret" style="color:var(--muted)">' + ((h.value/total)*100).toFixed(1) + '%</div></div></div>'; }).join('');
 }
 
 function renderHistory() {
   var h = state.histData; if (!h) return;
-  $('hist-in').textContent = fmt(h.totalDeposited);
-  $('hist-out').textContent = fmt(h.totalWithdrawn);
-  $('hist-div').textContent = fmt(h.totalDividends);
+  $('hist-in').textContent = fmt(h.totalDeposited); $('hist-out').textContent = fmt(h.totalWithdrawn); $('hist-div').textContent = fmt(h.totalDividends);
   renderTxList();
 }
 
 function filterTx(type, btn) {
   state.txFilter = type;
   document.querySelectorAll('.filter-tab').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  renderTxList();
+  btn.classList.add('active'); renderTxList();
 }
 
 function renderTxList() {
   var h = state.histData; if (!h) return;
-  var txs = h.transactions;
+  var txs = h.transactions.slice();
   if (state.txFilter !== 'ALL') txs = txs.filter(function(t){ return t.type === state.txFilter; });
-  txs = txs.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  txs.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
   var icons = { DEPOSIT: '↓', WITHDRAWAL: '↑', DIVIDEND: '✦' };
-  $('tx-list').innerHTML = txs.length === 0
-    ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No transactions found.</div>'
-    : txs.map(function(t) {
-        var cls = t.type.toLowerCase();
-        var prefix = t.type === 'DEPOSIT' ? '+' : t.type === 'WITHDRAWAL' ? '−' : '+';
-        return '<div class="tx-row"><div class="tx-left"><div class="tx-icon tx-icon-' + cls + '">' + (icons[t.type]||'·') + '</div><div><div class="tx-type">' + t.type.charAt(0) + t.type.slice(1).toLowerCase() + (t.note ? ' · ' + t.note : '') + '</div><div class="tx-date">' + fmtDate(t.date) + '</div></div></div><div class="tx-amount tx-amount-' + cls + '">' + prefix + fmt(t.amount) + '</div></div>';
-      }).join('');
+  $('tx-list').innerHTML = txs.length === 0 ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No transactions found.</div>'
+    : txs.map(function(t){ var cls = t.type.toLowerCase(); var prefix = t.type==='DEPOSIT'?'+':t.type==='WITHDRAWAL'?'−':'+'; return '<div class="tx-row"><div class="tx-left"><div class="tx-icon tx-icon-' + cls + '">' + (icons[t.type]||'·') + '</div><div><div class="tx-type">' + t.type.charAt(0)+t.type.slice(1).toLowerCase() + (t.note?' · '+t.note:'') + '</div><div class="tx-date">' + fmtDate(t.date) + '</div></div></div><div class="tx-amount tx-amount-' + cls + '">' + prefix + fmt(t.amount) + '</div></div>'; }).join('');
 }
 
-// ── Navigation ─────────────────────────────────────────────
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
-  $('page-' + name).classList.add('active');
-  btn.classList.add('active');
+  $('page-' + name).classList.add('active'); btn.classList.add('active');
 }
 
-// ── Refresh ────────────────────────────────────────────────
 async function refreshAll() {
-  var btn = $('refreshBtn');
-  btn.innerHTML = '<span class="spinning">↻</span> Refresh';
+  var btn = $('refreshBtn'); btn.innerHTML = '<span class="spinning">↻</span> Refresh';
   try {
     var results = await Promise.all([fetchPieData(), fetchHistory()]);
-    state.pieData = results[0];
-    state.histData = results[1];
-    renderDashboard();
-    renderChart();
-    renderHistory();
-  } catch(e) {
-    $('holdings-list').innerHTML = '<div class="error-box">⚠ ' + e.message + '</div>';
-  }
+    state.pieData = results[0]; state.histData = results[1];
+    renderDashboard(); renderChart(); renderHistory();
+  } catch(e) { $('holdings-list').innerHTML = '<div class="error-box">⚠ ' + e.message + '</div>'; }
   btn.innerHTML = '↻ Refresh';
 }
 
-// ── Setup flow ─────────────────────────────────────────────
 async function saveSetup() {
   hideError();
   var proxy = $('inputProxy').value.trim().replace(/\/+$/,'');
   var key = $('inputKey').value.trim();
+  var secret = $('inputSecret').value.trim();
   var pie = $('inputPie').value.trim();
   if (!proxy) { showError('Enter your Cloudflare Worker URL.'); return; }
   if (!key)   { showError('Enter your T212 API key.'); return; }
   if (!pie)   { showError('Enter the pie name.'); return; }
-  $('btnSave').disabled = true;
-  $('btnSave').textContent = 'Connecting…';
-  state.proxyUrl = proxy; state.apiKey = key; state.pieName = pie;
+  $('btnSave').disabled = true; $('btnSave').textContent = 'Connecting…';
+  state.proxyUrl = proxy; state.apiKey = key; state.apiSecret = secret; state.pieName = pie;
   try {
     await fetchPieData();
-    saveCredentials();
-    showApp();
-    refreshAll();
+    saveCredentials(); showApp(); refreshAll();
   } catch(e) {
     showError('Could not connect: ' + e.message);
-    $('btnSave').disabled = false;
-    $('btnSave').textContent = 'Save & Connect';
+    $('btnSave').disabled = false; $('btnSave').textContent = 'Save & Connect';
   }
 }
 
 function showApp() {
-  $('setupScreen').classList.add('hidden');
-  $('app').classList.remove('hidden');
-  $('bottomNav').classList.remove('hidden');
+  $('setupScreen').classList.add('hidden'); $('app').classList.remove('hidden'); $('bottomNav').classList.remove('hidden');
 }
 
 function resetSetup() {
   if (!confirm('Reset connection? You\'ll need to re-enter credentials.')) return;
   try { localStorage.removeItem('luke_pie'); } catch(e) {}
-  $('app').classList.add('hidden');
-  $('bottomNav').classList.add('hidden');
-  $('setupScreen').classList.remove('hidden');
+  $('app').classList.add('hidden'); $('bottomNav').classList.add('hidden'); $('setupScreen').classList.remove('hidden');
 }
 
-// ── Init ───────────────────────────────────────────────────
-if (loadCredentials()) {
-  showApp();
-  refreshAll();
-}
+if (loadCredentials()) { showApp(); refreshAll(); }
 </script>
 </body>
 </html>
