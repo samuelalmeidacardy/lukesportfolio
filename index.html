@@ -309,7 +309,7 @@ function hideError() { $('errorBox').classList.add('hidden'); }
 // ── API calls — pass key per-request, same as dividend tracker ──
 async function apiGet(endpoint) {
   var url = state.proxyUrl.replace(/\/+$/, '') + '/live' + endpoint;
-  var res = await fetch(url, { headers: { Authorization: state.apiKey } });
+  var res = await fetch(url, { headers: { Authorization: 'Basic ' + btoa(state.apiKey + ':') } });
   if (!res.ok) throw new Error('API error ' + res.status);
   return res.json();
 }
