@@ -17,11 +17,11 @@
     --bg: #0b1120; --card: #111827; --border: #1e293b;
     --text: #e2e8f0; --muted: #64748b; --dim: #475569;
     --green: #10b981; --red: #ef4444; --purple: #8b5cf6;
-    --blue: #3b82f6; --amber: #f59e0b;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; min-height: 100vh; min-height: 100dvh; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; min-height: 100dvh; }
 
+  /* Setup */
   .connect-wrap { max-width: 420px; margin: 0 auto; padding: 48px 16px; }
   .connect-logo { text-align: center; margin-bottom: 28px; }
   .connect-icon { width: 56px; height: 56px; border-radius: 14px; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #fff; margin: 0 auto 12px; }
@@ -32,33 +32,33 @@
   .form-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: block; }
   .form-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; outline: none; }
   .form-input:focus { border-color: var(--purple); }
-  .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: #fff; background: var(--purple); transition: opacity 0.15s; }
+  .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: #fff; background: var(--purple); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .error-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; font-size: 13px; color: var(--red); }
   .info-text { font-size: 11px; color: var(--dim); text-align: center; margin-top: 12px; line-height: 1.6; }
   .hidden { display: none !important; }
 
+  /* App */
   #app { padding-bottom: 72px; }
   .container { max-width: 480px; margin: 0 auto; padding: 12px; }
-
   .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .header-logo { display: flex; align-items: center; gap: 8px; }
   .header-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
   .header-title { font-size: 17px; font-weight: 700; }
   .header-right { display: flex; align-items: center; gap: 6px; }
-  .btn-sm { padding: 6px 10px; border-radius: 7px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); background: transparent; transition: color 0.15s; }
-  .btn-sm:hover { color: var(--text); }
+  .btn-sm { padding: 6px 10px; border-radius: 7px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); background: transparent; }
   .spinning { animation: spin 1s linear infinite; display: inline-block; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(11,17,32,0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom, 0); z-index: 100; }
-  nav button { flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 4px 8px; cursor: pointer; transition: color 0.15s; }
+  nav button { flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 4px 8px; cursor: pointer; }
   nav button.active { color: var(--purple); }
 
   .page { display: none; }
   .page.active { display: block; animation: fadeUp 0.25s ease; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
+  /* Stats */
   .big-stat { margin-bottom: 16px; }
   .big-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
   .big-val { font-size: 44px; font-weight: 700; letter-spacing: -1.5px; line-height: 1; }
@@ -66,7 +66,6 @@
   .badge-up { background: rgba(16,185,129,0.12); color: var(--green); }
   .badge-down { background: rgba(239,68,68,0.12); color: var(--red); }
   .badge-flat { background: rgba(100,116,139,0.12); color: var(--muted); }
-
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .stat { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 14px; }
   .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
@@ -75,7 +74,6 @@
   .stat.wide { grid-column: 1 / -1; }
   .green { color: var(--green); }
   .red { color: var(--red); }
-
   .section-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 4px; }
   .holding-row { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .holding-name { font-size: 14px; font-weight: 600; }
@@ -83,35 +81,53 @@
   .holding-right { text-align: right; }
   .holding-val { font-size: 14px; font-weight: 600; }
   .holding-ret { font-size: 11px; margin-top: 2px; }
-
   .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
   .chart-wrap canvas { width: 100% !important; }
+  .skeleton { background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 10px; height: 60px; margin-bottom: 8px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .last-updated { font-size: 10px; color: var(--dim); text-align: center; margin-top: 8px; }
 
+  /* Summary strip */
   .summary-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
   .strip-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
   .strip-label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
   .strip-val { font-size: 14px; font-weight: 700; }
 
-  .filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
-  .filter-tab { white-space: nowrap; background: var(--card); border: 1px solid var(--border); border-radius: 20px; color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 12px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+  /* Filter tabs */
+  .filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 2px; }
+  .filter-tab { white-space: nowrap; background: var(--card); border: 1px solid var(--border); border-radius: 20px; color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 12px; cursor: pointer; flex-shrink: 0; }
   .filter-tab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
 
+  /* Transaction rows */
   .tx-row { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .tx-left { display: flex; align-items: center; gap: 10px; }
+  .tx-left { display: flex; align-items: center; gap: 10px; flex: 1; }
   .tx-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
   .tx-icon-deposit { background: rgba(16,185,129,0.12); }
   .tx-icon-withdrawal { background: rgba(239,68,68,0.12); }
-  .tx-icon-dividend { background: rgba(139,92,246,0.12); }
   .tx-type { font-size: 14px; font-weight: 600; }
-  .tx-date { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .tx-note { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .tx-date { font-size: 11px; color: var(--dim); margin-top: 1px; }
+  .tx-right { display: flex; align-items: center; gap: 8px; }
   .tx-amount { font-size: 14px; font-weight: 600; }
   .tx-amount-deposit { color: var(--green); }
   .tx-amount-withdrawal { color: var(--red); }
-  .tx-amount-dividend { color: var(--purple); }
+  .tx-delete { background: none; border: none; color: var(--dim); cursor: pointer; font-size: 16px; padding: 4px; line-height: 1; }
+  .tx-delete:hover { color: var(--red); }
 
-  .skeleton { background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 10px; height: 60px; margin-bottom: 8px; }
-  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-  .last-updated { font-size: 10px; color: var(--dim); text-align: center; margin-top: 8px; }
+  /* Add transaction form */
+  .add-tx-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+  .add-tx-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .add-tx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .add-tx-row.full { grid-template-columns: 1fr; }
+  .add-tx-input { width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; outline: none; }
+  .add-tx-input:focus { border-color: var(--purple); }
+  .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+  .type-btn { padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
+  .type-btn.active-deposit { background: rgba(16,185,129,0.12); border-color: var(--green); color: var(--green); }
+  .type-btn.active-withdrawal { background: rgba(239,68,68,0.12); border-color: var(--red); color: var(--red); }
+  .btn-add { width: 100%; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #fff; background: var(--purple); margin-top: 4px; }
+
+  .empty-state { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 13px; }
 </style>
 </head>
 <body>
@@ -131,11 +147,11 @@
       </div>
       <div class="form-group">
         <label class="form-label">API Key</label>
-        <input class="form-input" id="inputKey" type="password" placeholder="Paste your T212 API key">
+        <input class="form-input" id="inputKey" type="password" placeholder="T212 API key">
       </div>
       <div class="form-group">
         <label class="form-label">API Secret</label>
-        <input class="form-input" id="inputSecret" type="password" placeholder="Paste your T212 API secret">
+        <input class="form-input" id="inputSecret" type="password" placeholder="T212 API secret">
       </div>
       <div class="form-group">
         <label class="form-label">Pie Name</label>
@@ -144,10 +160,7 @@
       <div id="errorBox" class="error-box hidden"></div>
       <button class="btn" id="btnSave" onclick="saveSetup()">Save & Connect</button>
     </div>
-    <div class="info-text">
-      Enter your Cloudflare Worker URL, T212 credentials, and the exact pie name.<br>
-      All credentials saved locally on this device only.
-    </div>
+    <div class="info-text">Credentials are saved locally on this device only.</div>
   </div>
 </div>
 
@@ -155,6 +168,7 @@
 <div id="app" class="hidden">
   <div class="container">
 
+    <!-- Dashboard -->
     <div class="page active" id="page-dashboard">
       <div class="header">
         <div class="header-logo">
@@ -163,7 +177,7 @@
         </div>
         <div class="header-right">
           <button class="btn-sm" id="refreshBtn" onclick="refreshAll()">↻ Refresh</button>
-          <button class="btn-sm" onclick="resetSetup()" title="Reset setup">⚙</button>
+          <button class="btn-sm" onclick="resetSetup()">⚙</button>
         </div>
       </div>
       <div class="big-stat">
@@ -196,6 +210,7 @@
       <div class="last-updated" id="last-updated"></div>
     </div>
 
+    <!-- Performance -->
     <div class="page" id="page-chart">
       <div class="header">
         <div class="header-logo">
@@ -220,6 +235,7 @@
       <div id="alloc-list"></div>
     </div>
 
+    <!-- History (manual) -->
     <div class="page" id="page-history">
       <div class="header">
         <div class="header-logo">
@@ -227,31 +243,47 @@
           <div class="header-title">History</div>
         </div>
       </div>
+
       <div class="summary-strip">
         <div class="strip-item">
           <div class="strip-label">In</div>
-          <div class="strip-val green" id="hist-in">—</div>
+          <div class="strip-val green" id="hist-in">£0.00</div>
         </div>
         <div class="strip-item">
           <div class="strip-label">Out</div>
-          <div class="strip-val red" id="hist-out">—</div>
+          <div class="strip-val red" id="hist-out">£0.00</div>
         </div>
         <div class="strip-item">
-          <div class="strip-label">Dividends</div>
-          <div class="strip-val" style="color:var(--purple)" id="hist-div">—</div>
+          <div class="strip-label">Net</div>
+          <div class="strip-val" id="hist-net">£0.00</div>
         </div>
       </div>
+
+      <!-- Add transaction -->
+      <div class="add-tx-card">
+        <div class="add-tx-title">Add Transaction</div>
+        <div class="type-toggle">
+          <div class="type-btn active-deposit" id="typeDeposit" onclick="setType('DEPOSIT')">↓ Deposit</div>
+          <div class="type-btn" id="typeWithdrawal" onclick="setType('WITHDRAWAL')">↑ Withdrawal</div>
+        </div>
+        <div class="add-tx-row">
+          <input class="add-tx-input" id="txAmount" type="number" min="0" step="0.01" placeholder="Amount (£)">
+          <input class="add-tx-input" id="txDate" type="date">
+        </div>
+        <div class="add-tx-row full">
+          <input class="add-tx-input" id="txNote" type="text" placeholder="Note (optional)">
+        </div>
+        <button class="btn-add" onclick="addTransaction()">Add</button>
+      </div>
+
+      <!-- Filter tabs -->
       <div class="filter-tabs">
         <button class="filter-tab active" onclick="filterTx('ALL',this)">All</button>
         <button class="filter-tab" onclick="filterTx('DEPOSIT',this)">Deposits</button>
         <button class="filter-tab" onclick="filterTx('WITHDRAWAL',this)">Withdrawals</button>
-        <button class="filter-tab" onclick="filterTx('DIVIDEND',this)">Dividends</button>
       </div>
-      <div id="tx-list">
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-      </div>
+
+      <div id="tx-list"></div>
     </div>
 
   </div>
@@ -264,8 +296,10 @@
 </nav>
 
 <script>
-var state = { proxyUrl: '', apiKey: '', apiSecret: '', pieName: '', pieData: null, histData: null, txFilter: 'ALL', chart: null };
+// ── State ──────────────────────────────────────────────────
+var state = { proxyUrl: '', apiKey: '', apiSecret: '', pieName: '', pieData: null, txFilter: 'ALL', txType: 'DEPOSIT', chart: null };
 
+// ── Credentials ────────────────────────────────────────────
 function saveCredentials() {
   try { localStorage.setItem('luke_pie', JSON.stringify({ p: state.proxyUrl, k: state.apiKey, s: state.apiSecret, n: state.pieName })); } catch(e) {}
 }
@@ -277,66 +311,77 @@ function loadCredentials() {
   return false;
 }
 
+// ── Manual transactions ─────────────────────────────────────
+function loadTxs() {
+  try { return JSON.parse(localStorage.getItem('luke_txs')) || []; } catch(e) { return []; }
+}
+function saveTxs(txs) {
+  try { localStorage.setItem('luke_txs', JSON.stringify(txs)); } catch(e) {}
+}
+
+function setType(type) {
+  state.txType = type;
+  $('typeDeposit').className = 'type-btn' + (type === 'DEPOSIT' ? ' active-deposit' : '');
+  $('typeWithdrawal').className = 'type-btn' + (type === 'WITHDRAWAL' ? ' active-withdrawal' : '');
+}
+
+function addTransaction() {
+  var amount = parseFloat($('txAmount').value);
+  var date = $('txDate').value;
+  var note = $('txNote').value.trim();
+  if (!amount || amount <= 0) { alert('Enter a valid amount.'); return; }
+  if (!date) { alert('Select a date.'); return; }
+  var txs = loadTxs();
+  txs.push({ id: Date.now(), type: state.txType, amount: amount, date: date, note: note });
+  saveTxs(txs);
+  $('txAmount').value = '';
+  $('txNote').value = '';
+  renderHistory();
+  renderDashboardHistory();
+}
+
+function deleteTransaction(id) {
+  if (!confirm('Delete this transaction?')) return;
+  var txs = loadTxs().filter(function(t){ return t.id !== id; });
+  saveTxs(txs);
+  renderHistory();
+  renderDashboardHistory();
+}
+
+// ── Helpers ────────────────────────────────────────────────
 function $(id) { return document.getElementById(id); }
 function fmt(n) { return '£' + Math.abs(n).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function sign(n) { return n >= 0 ? '+' : '−'; }
-function fmtDate(iso) { if (!iso) return '—'; return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+function fmtDate(d) { if (!d) return '—'; var parts = d.split('-'); return new Date(parts[0], parts[1]-1, parts[2]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
 function showError(msg) { $('errorBox').textContent = msg; $('errorBox').classList.remove('hidden'); }
 function hideError() { $('errorBox').classList.add('hidden'); }
-
 function getCreds() { return btoa(state.apiKey + ':' + state.apiSecret); }
 
-async function apiGet(endpoint, paginate) {
-  var base = state.proxyUrl.replace(/\/+$/, '') + '/live';
-  var url = base + endpoint;
-  var all = [];
-  while (true) {
-    var res = await fetch(url, { headers: { Authorization: 'Basic ' + getCreds() } });
-    if (!res.ok) throw new Error('API error ' + res.status);
-    var data = await res.json();
-    if (!paginate) return data;
-    if (data.items) all = all.concat(data.items); else return data;
-    if (data.nextPagePath) { url = base + data.nextPagePath; } else break;
-  }
-  return all;
-}
-
-async function findPie() {
-  return { id: 8176003 };
+// ── API ────────────────────────────────────────────────────
+async function apiGet(endpoint) {
+  var url = state.proxyUrl.replace(/\/+$/, '') + '/live' + endpoint;
+  var res = await fetch(url, { headers: { Authorization: 'Basic ' + getCreds() } });
+  if (!res.ok) throw new Error('API error ' + res.status);
+  return res.json();
 }
 
 async function fetchPieData() {
-  var pie = await findPie();
-  var detail = await apiGet('/equity/pies/' + pie.id, false);
-  console.log('Pie detail:', JSON.stringify(detail));
- var instruments = detail.instruments || [];
- var invested = instruments.reduce(function(s,h){ return s + ((h.result && h.result.priceAvgInvestedValue) || 0); }, 0);
- var value = instruments.reduce(function(s,h){ return s + ((h.result && h.result.priceAvgValue) || 0); }, 0);
+  var detail = await apiGet('/equity/pies/8176003');
+  var instruments = detail.instruments || [];
+  var invested = instruments.reduce(function(s,h){ return s + ((h.result && h.result.priceAvgInvestedValue) || 0); }, 0);
+  var value = instruments.reduce(function(s,h){ return s + ((h.result && h.result.priceAvgValue) || 0); }, 0);
   var gainLoss = value - invested;
   var gainPct = invested > 0 ? (gainLoss / invested) * 100 : 0;
   return {
     value: value, invested: invested, gainLoss: gainLoss, gainPct: gainPct,
-    holdings: (detail.instruments || []).map(function(h) {
-      return { ticker: h.ticker, name: h.fullName || h.ticker, value: (h.result && h.result.priceAvgValue) || 0, result: (h.result && (h.result.resultCoefficient || h.result.priceAvgResultCoef)) || 0 };
+    holdings: instruments.map(function(h) {
+      return { ticker: h.ticker, name: h.fullName || h.ticker, value: (h.result && h.result.priceAvgValue) || 0, result: (h.result && h.result.priceAvgResultCoef) || 0 };
     }),
     updatedAt: new Date().toISOString()
   };
 }
 
-async function fetchHistory() {
-  var txs = await apiGet('/history/transactions?limit=50', false);
-  var relevant = (txs.items || []).filter(function(t) { return ['DEPOSIT','WITHDRAWAL','DIVIDEND'].indexOf(t.type) > -1; });
-  var transactions = relevant.map(function(t) {
-    return { type: t.type, amount: t.amount || 0, date: t.dateCreated || t.date, note: t.type === 'DIVIDEND' ? (t.ticker || '') : '' };
-  });
-  return {
-    transactions: transactions,
-    totalDeposited: transactions.filter(function(t){return t.type==='DEPOSIT';}).reduce(function(s,t){return s+t.amount;},0),
-    totalWithdrawn: transactions.filter(function(t){return t.type==='WITHDRAWAL';}).reduce(function(s,t){return s+Math.abs(t.amount);},0),
-    totalDividends: transactions.filter(function(t){return t.type==='DIVIDEND';}).reduce(function(s,t){return s+t.amount;},0)
-  };
-}
-
+// ── Render Dashboard ────────────────────────────────────────
 function renderDashboard() {
   var d = state.pieData; if (!d) return;
   $('dash-value').textContent = fmt(d.value);
@@ -345,16 +390,22 @@ function renderDashboard() {
   $('dash-invested').textContent = fmt(d.invested);
   var glEl = $('dash-gl'); glEl.textContent = sign(d.gainLoss) + fmt(d.gainLoss); glEl.className = 'stat-val ' + (d.gainLoss >= 0 ? 'green' : 'red');
   $('dash-glpct').textContent = sign(d.gainPct) + Math.abs(d.gainPct).toFixed(2) + '%';
-  if (state.histData) {
-    $('dash-deposited').textContent = fmt(state.pieData.invested);
-    $('dash-withdrawn').textContent = state.histData.totalWithdrawn > 0 ? fmt(state.histData.totalWithdrawn) + ' withdrawn' : 'No withdrawals';
-  }
   var holdings = (d.holdings || []).slice().sort(function(a,b){ return b.value - a.value; });
   $('holdings-list').innerHTML = holdings.length === 0 ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No holdings found.</div>'
     : holdings.map(function(h) { var ret = h.result * 100; return '<div class="holding-row"><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret ' + (ret>=0?'green':'red') + '">' + sign(ret) + Math.abs(ret).toFixed(2) + '%</div></div></div>'; }).join('');
   $('last-updated').textContent = 'Updated ' + new Date(d.updatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  renderDashboardHistory();
 }
 
+function renderDashboardHistory() {
+  var txs = loadTxs();
+  var totalIn = txs.filter(function(t){return t.type==='DEPOSIT';}).reduce(function(s,t){return s+t.amount;},0);
+  var totalOut = txs.filter(function(t){return t.type==='WITHDRAWAL';}).reduce(function(s,t){return s+t.amount;},0);
+  $('dash-deposited').textContent = fmt(totalIn);
+  $('dash-withdrawn').textContent = totalOut > 0 ? fmt(totalOut) + ' withdrawn' : 'No withdrawals';
+}
+
+// ── Render Chart ────────────────────────────────────────────
 function renderChart() {
   var d = state.pieData; if (!d) return;
   $('chart-pct').textContent = sign(d.gainPct) + Math.abs(d.gainPct).toFixed(2) + '%';
@@ -373,44 +424,61 @@ function renderChart() {
   $('alloc-list').innerHTML = sorted.map(function(h,i){ return '<div class="holding-row"><div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;border-radius:50%;background:' + (COLORS[i]||'#64748b') + ';flex-shrink:0"></div><div><div class="holding-name">' + h.name + '</div><div class="holding-ticker">' + h.ticker + '</div></div></div><div class="holding-right"><div class="holding-val">' + fmt(h.value) + '</div><div class="holding-ret" style="color:var(--muted)">' + ((h.value/total)*100).toFixed(1) + '%</div></div></div>'; }).join('');
 }
 
+// ── Render History ──────────────────────────────────────────
 function renderHistory() {
-  var h = state.histData; if (!h) return;
-  $('hist-in').textContent = fmt(h.totalDeposited); $('hist-out').textContent = fmt(h.totalWithdrawn); $('hist-div').textContent = fmt(h.totalDividends);
-  renderTxList();
+  var txs = loadTxs();
+  var totalIn  = txs.filter(function(t){return t.type==='DEPOSIT';}).reduce(function(s,t){return s+t.amount;},0);
+  var totalOut = txs.filter(function(t){return t.type==='WITHDRAWAL';}).reduce(function(s,t){return s+t.amount;},0);
+  $('hist-in').textContent  = fmt(totalIn);
+  $('hist-out').textContent = fmt(totalOut);
+  var net = totalIn - totalOut;
+  $('hist-net').textContent = fmt(net);
+  $('hist-net').className = 'strip-val ' + (net >= 0 ? 'green' : 'red');
+  renderTxList(txs);
 }
 
 function filterTx(type, btn) {
   state.txFilter = type;
   document.querySelectorAll('.filter-tab').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active'); renderTxList();
+  btn.classList.add('active');
+  renderTxList(loadTxs());
 }
 
-function renderTxList() {
-  var h = state.histData; if (!h) return;
-  var txs = h.transactions.slice();
-  if (state.txFilter !== 'ALL') txs = txs.filter(function(t){ return t.type === state.txFilter; });
-  txs.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
-  var icons = { DEPOSIT: '↓', WITHDRAWAL: '↑', DIVIDEND: '✦' };
-  $('tx-list').innerHTML = txs.length === 0 ? '<div style="color:var(--muted);font-size:13px;padding:16px 0">No transactions found.</div>'
-    : txs.map(function(t){ var cls = t.type.toLowerCase(); var prefix = t.type==='DEPOSIT'?'+':t.type==='WITHDRAWAL'?'−':'+'; return '<div class="tx-row"><div class="tx-left"><div class="tx-icon tx-icon-' + cls + '">' + (icons[t.type]||'·') + '</div><div><div class="tx-type">' + t.type.charAt(0)+t.type.slice(1).toLowerCase() + (t.note?' · '+t.note:'') + '</div><div class="tx-date">' + fmtDate(t.date) + '</div></div></div><div class="tx-amount tx-amount-' + cls + '">' + prefix + fmt(t.amount) + '</div></div>'; }).join('');
+function renderTxList(txs) {
+  var filtered = txs.slice();
+  if (state.txFilter !== 'ALL') filtered = filtered.filter(function(t){ return t.type === state.txFilter; });
+  filtered.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  if (filtered.length === 0) {
+    $('tx-list').innerHTML = '<div class="empty-state">No transactions yet.<br>Add one above.</div>';
+    return;
+  }
+  $('tx-list').innerHTML = filtered.map(function(t) {
+    var cls = t.type.toLowerCase();
+    var prefix = t.type === 'DEPOSIT' ? '+' : '−';
+    var icon = t.type === 'DEPOSIT' ? '↓' : '↑';
+    return '<div class="tx-row"><div class="tx-left"><div class="tx-icon tx-icon-' + cls + '">' + icon + '</div><div><div class="tx-type">' + (t.type === 'DEPOSIT' ? 'Deposit' : 'Withdrawal') + '</div>' + (t.note ? '<div class="tx-note">' + t.note + '</div>' : '') + '<div class="tx-date">' + fmtDate(t.date) + '</div></div></div><div class="tx-right"><div class="tx-amount tx-amount-' + cls + '">' + prefix + fmt(t.amount) + '</div><button class="tx-delete" onclick="deleteTransaction(' + t.id + ')">×</button></div></div>';
+  }).join('');
 }
 
+// ── Navigation ─────────────────────────────────────────────
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
   $('page-' + name).classList.add('active'); btn.classList.add('active');
+  if (name === 'history') renderHistory();
 }
 
+// ── Refresh ────────────────────────────────────────────────
 async function refreshAll() {
   var btn = $('refreshBtn'); btn.innerHTML = '<span class="spinning">↻</span> Refresh';
   try {
-    var results = await Promise.all([fetchPieData(), fetchHistory()]);
-    state.pieData = results[0]; state.histData = results[1];
-    renderDashboard(); renderChart(); renderHistory();
+    state.pieData = await fetchPieData();
+    renderDashboard(); renderChart();
   } catch(e) { $('holdings-list').innerHTML = '<div class="error-box">⚠ ' + e.message + '</div>'; }
   btn.innerHTML = '↻ Refresh';
 }
 
+// ── Setup ──────────────────────────────────────────────────
 async function saveSetup() {
   hideError();
   var proxy = $('inputProxy').value.trim().replace(/\/+$/,'');
@@ -436,11 +504,18 @@ function showApp() {
 }
 
 function resetSetup() {
-  if (!confirm('Reset connection? You\'ll need to re-enter credentials.')) return;
+  if (!confirm('Reset connection? Transactions will be kept.')) return;
   try { localStorage.removeItem('luke_pie'); } catch(e) {}
   $('app').classList.add('hidden'); $('bottomNav').classList.add('hidden'); $('setupScreen').classList.remove('hidden');
 }
 
+// Set default date to today
+document.addEventListener('DOMContentLoaded', function() {
+  var today = new Date().toISOString().split('T')[0];
+  if ($('txDate')) $('txDate').value = today;
+});
+
+// ── Init ───────────────────────────────────────────────────
 if (loadCredentials()) { showApp(); refreshAll(); }
 </script>
 </body>
