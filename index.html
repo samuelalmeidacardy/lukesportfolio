@@ -308,14 +308,14 @@ async function findPie() {
 async function fetchPieData() {
   var pie = await findPie();
   var detail = await apiGet('/equity/pies/' + pie.id, false);
-  var invested = (detail.settings && detail.settings.initialInvestment) || 0;
-  var value = (detail.result && detail.result.value) || 0;
+  var invested = (detail.result && detail.result.priceAvgInvestedValue) || 0;
+  var value = (detail.result && detail.result.priceAvgValue) || 0;
   var gainLoss = value - invested;
   var gainPct = invested > 0 ? (gainLoss / invested) * 100 : 0;
   return {
     value: value, invested: invested, gainLoss: gainLoss, gainPct: gainPct,
     holdings: (detail.instruments || []).map(function(h) {
-      return { ticker: h.ticker, name: h.fullName || h.ticker, value: (h.result && h.result.value) || 0, result: (h.result && h.result.resultCoefficient) || 0 };
+      return { ticker: h.ticker, name: h.fullName || h.ticker, value: (h.result && h.result.value) || 0, result: (h.result && (h.result.resultCoefficient || h.result.priceAvgResultCoef)) || 0 };
     }),
     updatedAt: new Date().toISOString()
   };
