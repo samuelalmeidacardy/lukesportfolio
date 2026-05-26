@@ -302,12 +302,7 @@ async function apiGet(endpoint, paginate) {
 }
 
 async function findPie() {
-  var pies = await apiGet('/equity/pies', false);
-  var list = Array.isArray(pies) ? pies : [];
-  console.log('Pies found:', JSON.stringify(list));
-  var pie = list[0];
-  if (!pie) throw new Error('No pies found on this account.');
-  return pie;
+  return { id: 8176003 };
 }
 
 async function fetchPieData() {
@@ -327,7 +322,7 @@ async function fetchPieData() {
 }
 
 async function fetchHistory() {
-  var txs = await apiGet('/history/transactions?limit=50', true);
+  var txs = await apiGet('/history/transactions?limit=50', false);
   var relevant = txs.filter(function(t) { return ['DEPOSIT','WITHDRAWAL','DIVIDEND'].indexOf(t.type) > -1; });
   var transactions = relevant.map(function(t) {
     return { type: t.type, amount: t.amount || 0, date: t.dateCreated || t.date, note: t.type === 'DIVIDEND' ? (t.ticker || '') : '' };
