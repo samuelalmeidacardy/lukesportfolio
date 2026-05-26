@@ -304,8 +304,8 @@ async function apiGet(endpoint, paginate) {
 async function findPie() {
   var pies = await apiGet('/equity/pies', false);
   var list = Array.isArray(pies) ? pies : [];
-  var pie = list.find(function(p) { return p.settings && p.settings.name && p.settings.name.toLowerCase() === state.pieName.toLowerCase(); });
-  if (!pie) throw new Error('Pie "' + state.pieName + '" not found. Available: ' + list.map(function(p){ return p.settings && p.settings.name; }).join(', '));
+  var pie = list[0];
+  if (!pie) throw new Error('No pies found on this account.');
   return pie;
 }
 
