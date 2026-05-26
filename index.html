@@ -308,6 +308,7 @@ async function findPie() {
 async function fetchPieData() {
   var pie = await findPie();
   var detail = await apiGet('/equity/pies/' + pie.id, false);
+  console.log('Pie detail:', JSON.stringify(detail));
   var invested = (detail.result && detail.result.priceAvgInvestedValue) || 0;
   var value = (detail.result && detail.result.priceAvgValue) || 0;
   var gainLoss = value - invested;
